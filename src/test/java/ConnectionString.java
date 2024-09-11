@@ -32,8 +32,8 @@ public class ConnectionString {
         System.out.println("This is Frist Sample Test");
     }
 
-//    @AfterTest
-//    public void CloseDriver() {
-//        driver.quit();
-//    }
+    @AfterTest
+    public void CloseDriver() {
+        driver.quit();
+    }
 }
