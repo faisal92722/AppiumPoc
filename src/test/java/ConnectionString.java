@@ -5,6 +5,7 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -21,19 +22,34 @@ public class ConnectionString {
         capabilities.setCapability("appium:app", System.getProperty("user.dir") + "/Application/Android.SauceLabs.Mobile.Sample.app.2.7.1.apk");
         capabilities.setCapability("appium:appPackage", "com.swaglabsmobileapp");
         capabilities.setCapability("appium:appActivity", "com.swaglabsmobileapp.SplashActivity");
+        capabilities.setCapability("appium:noReset",false);
+      //  capabilities.setCapability("appium:newCommandTimeout", 5000);
+//        capabilities.setCapability("appium:avd","Pixel_3a_API_35_extension_level_13_x86_64");
+//        capabilities.setCapability("appium:avdLaunchTimoeout","50000000");
 
-        driver = new AndroidDriver(new URL("http://192.168.100.101:4723"), capabilities);
-        System.out.println("Starting Andrion Appium Server");
+        driver = new AndroidDriver(new URL("http://127.0.0.1:4723"), capabilities);
+
+        System.out.println("Starting Andriod Appium Server");
 
     }
 
     @Test
     public void FirstTest() {
-        System.out.println("This is Frist Sample Test");
+        System.out.println("This is First Sample Test");
     }
 
     @AfterTest
     public void CloseDriver() {
         driver.quit();
+////        String cmdString = "adb -s emulator-5554 env kill";
+////        if(driver!=null)
+////        {
+////            try{
+////                Runtime.getRuntime().exec("CMD /C "+ cmdString);
+////            } catch (IOException e) {
+////                e.printStackTrace();
+////            }
+//        }
+
     }
 }
