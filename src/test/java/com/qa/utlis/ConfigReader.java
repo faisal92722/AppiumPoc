@@ -1,4 +1,4 @@
-package com.qa.configurationFileReader;
+package com.qa.utlis;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
