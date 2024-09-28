@@ -2,29 +2,87 @@ package com.qa.TestCases;
 
 import com.qa.base.AppFactory;
 import com.qa.pages.LoginPage;
+import com.qa.pages.ProductPage;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.openqa.selenium.devtools.idealized.log.Log;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.Assert;
+import org.testng.annotations.*;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.util.Objects;
 
 public class LoginTest extends AppFactory {
     LoginPage loginpage;
-@BeforeTest
-    public void setup(){
-        loginpage = new LoginPage();
-    }
-     @Test
-    public void Validlogin() throws InterruptedException {
-        System.out.println("This test is used for Valid Login");
-            loginpage.enterusername("standard_user");
-            loginpage.enterpassword("secret_sauce");
-            loginpage.clickloginbutton();
-            Thread.sleep(5000);
-            System.out.println("Login Successfully");
+    ProductPage productpage;
+    InputStream inputstream;
+    JSONObject loginUser;
 
+    @BeforeMethod
+    public void setup(Method mehtod){
+
+    loginpage = new LoginPage();
+    System.out.println("\n*********"+ mehtod.getName()+"**********\n");
+    }
+
+    @BeforeClass
+    public  void setupDataStream() throws IOException {
+        try {
+            String dataFilename = "data/loginuser.json";
+            inputstream = getClass().getClassLoader().getResourceAsStream(dataFilename);
+            JSONTokener jsonTokener = new JSONTokener(Objects.requireNonNull(inputstream));
+            loginUser = new JSONObject(jsonTokener);
+
+        }catch (Exception exception){
+        exception.printStackTrace();
+        } finally {
+            if (inputstream != null){
+                inputstream.close();
+            }
         }
+    }
+    @Test
+    public void verifyinvalidusername(){
+    System.out.println("This test is used to Login with invalid username and valid password");
+    loginpage.enterusername(loginUser.getJSONObject("InvalidUser").getString("username"));
+    loginpage.enterpassword(loginUser.getJSONObject("InvalidUser").getString("password"));
+    loginpage.clickloginbutton();
+
+    String expectederrormessage = "Username and password do not match any user in this service.";
+    String actualmessage = loginpage.getErrorMessage();
+
+    System.out.println("Actual Error Message is:"+ actualmessage +"\nExpected Error Message is:"+expectederrormessage);
+    Assert.assertEquals(actualmessage,expectederrormessage);
+
+    }
+    @Test
+    public  void verifyInvalidpassword(){
+        System.out.println("This test is used to Login with valid username and invalid password");
+        loginpage.enterusername(loginUser.getJSONObject("InvalidPassword").getString("username"));
+        loginpage.enterpassword(loginUser.getJSONObject("InvalidPassword").getString("password"));
+        loginpage.clickloginbutton();
+
+        String expectederrormessage = "Username and password do not match any user in this service.";
+        String actualmessage = loginpage.getErrorMessage();
+
+        System.out.println("Actual Error Message is:"+ actualmessage +"\nExpected Error Message is:"+expectederrormessage);
+        Assert.assertEquals(actualmessage,expectederrormessage);
+    }
+    @Test
+    public void verifyvalidLogin(){
+        System.out.println("This test is used to Login with valid username and valid password");
+        loginpage.enterusername(loginUser.getJSONObject("validusernameandpassword").getString("username"));
+        loginpage.enterpassword(loginUser.getJSONObject("validusernameandpassword").getString("password"));
+        productpage = loginpage.clickloginbutton();
+        String expectedTitle = "PRODUCTS";
+        String actualTitle = productpage.getTitle();
+
+        System.out.println("Actual Product Titel:"+expectedTitle+"Expected Title:"+actualTitle);
+        Assert.assertEquals(actualTitle,expectedTitle);
+
+    }
 
     @AfterTest
     public void teardown(){
