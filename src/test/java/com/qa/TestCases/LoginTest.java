@@ -43,7 +43,7 @@ public class LoginTest extends AppFactory {
             }
         }
     }
-    //@Test
+    @Test
     public void verifyinvalidusername(){
     System.out.println("This test is used to Login with invalid username and valid password");
     loginpage.enterusername(loginUser.getJSONObject("InvalidUser").getString("username"));
@@ -57,7 +57,7 @@ public class LoginTest extends AppFactory {
     Assert.assertEquals(actualmessage,expectederrormessage);
 
     }
-    //@Test
+    @Test
     public  void verifyInvalidpassword(){
         System.out.println("This test is used to Login with valid username and invalid password");
         loginpage.enterusername(loginUser.getJSONObject("InvalidPassword").getString("username"));
