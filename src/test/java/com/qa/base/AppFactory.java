@@ -4,6 +4,8 @@ import com.qa.utlis.ConfigReader;
 import com.qa.utlis.utilities;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -11,21 +13,44 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Parameters;
+import org.xml.sax.SAXException;
 
-import javax.swing.text.Utilities;
-import java.net.MalformedURLException;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.time.Duration;
+import java.util.HashMap;
 
 public class AppFactory {
 
     public  static  AppiumDriver driver;
     public  static ConfigReader configreader;
+    protected HashMap<String, String> stringHashMap = new HashMap<>();
+    InputStream stringIs;
+
+    utilities util;
+
+    static Logger log = LogManager.getLogger(AppFactory.class.getName());
+
+
     @BeforeTest
     @Parameters({"platformName","platformVersion","deviceName"})
-    public void initializer(String platformName, String platformVersion, String deviceName) throws MalformedURLException {
+    public void initializer(String platformName, String platformVersion, String deviceName) throws IOException, ParserConfigurationException, SAXException {
         try{
             configreader = new ConfigReader();
+            util = new utilities();
+            log.debug("This is debug Message");
+            log.info("This is info Message");
+            log.warn("This is warn Message");
+            log.error("This is error Message");
+            log.fatal("This is fatal Message");
+            String xmlFileName = "strings/string.xml";
+            stringIs = getClass().getClassLoader().getResourceAsStream(xmlFileName);
+            stringHashMap = util.parseStringXML(stringIs);
+
+
+
             DesiredCapabilities capabilities = new DesiredCapabilities();
             capabilities.setCapability("appium:platformName", platformName);
             capabilities.setCapability("appium:platformVersion", platformVersion);

@@ -1,7 +1,51 @@
 package com.qa.utlis;
 
 import com.qa.base.AppFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
 
 public class utilities extends AppFactory {
     public  static final long WAIT = 20;
+
+    public HashMap<String, String> parseStringXML(InputStream file) throws ParserConfigurationException, IOException, SAXException {
+        HashMap<String, String> stringMap = new HashMap<>();
+
+        // Get Document Builder
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+
+        //Build Document
+        Document document = builder.parse(file);
+
+        //Normalize XML Structure
+        document.getDocumentElement().normalize();
+        Element root = document.getDocumentElement();
+        System.out.println(root.getNodeName());
+
+        //Get All elements
+        NodeList nodeList = document.getElementsByTagName("string");
+
+        //Iterate all elements
+        for (int temp = 0;temp <nodeList.getLength();temp++){
+            Node node = nodeList.item(temp);
+            if (node.getNodeType() == Node.ELEMENT_NODE){
+                Element element = (Element) node;
+
+                //Store each element
+                stringMap.put(element.getAttribute("name"),element.getTextContent());
+
+          }
+        }
+        return stringMap;
+    }
 }
