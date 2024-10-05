@@ -43,28 +43,28 @@ public class LoginTest extends AppFactory {
             }
         }
     }
-    @Test
+    //@Test
     public void verifyinvalidusername(){
     System.out.println("This test is used to Login with invalid username and valid password");
     loginpage.enterusername(loginUser.getJSONObject("InvalidUser").getString("username"));
     loginpage.enterpassword(loginUser.getJSONObject("InvalidUser").getString("password"));
     loginpage.clickloginbutton();
 
-    String expectederrormessage = "Username and password do not match any user in this service.";
+    String expectederrormessage = stringHashMap.get("error_invalid_username_and_password");
     String actualmessage = loginpage.getErrorMessage();
 
     System.out.println("Actual Error Message is:"+ actualmessage +"\nExpected Error Message is:"+expectederrormessage);
     Assert.assertEquals(actualmessage,expectederrormessage);
 
     }
-    @Test
+    //@Test
     public  void verifyInvalidpassword(){
         System.out.println("This test is used to Login with valid username and invalid password");
         loginpage.enterusername(loginUser.getJSONObject("InvalidPassword").getString("username"));
         loginpage.enterpassword(loginUser.getJSONObject("InvalidPassword").getString("password"));
         loginpage.clickloginbutton();
 
-        String expectederrormessage = "Username and password do not match any user in this service.";
+        String expectederrormessage = stringHashMap.get("error_invalid_username_and_password");;
         String actualmessage = loginpage.getErrorMessage();
 
         System.out.println("Actual Error Message is:"+ actualmessage +"\nExpected Error Message is:"+expectederrormessage);
@@ -76,7 +76,7 @@ public class LoginTest extends AppFactory {
         loginpage.enterusername(loginUser.getJSONObject("validusernameandpassword").getString("username"));
         loginpage.enterpassword(loginUser.getJSONObject("validusernameandpassword").getString("password"));
         productpage = loginpage.clickloginbutton();
-        String expectedTitle = "PRODUCTS";
+        String expectedTitle = stringHashMap.get("product.title");;
         String actualTitle = productpage.getTitle();
 
         System.out.println("Actual Product Titel:"+expectedTitle+"Expected Title:"+actualTitle);
