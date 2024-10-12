@@ -24,7 +24,7 @@ public class LoginTest extends AppFactory {
     public void setup(Method mehtod){
 
     loginpage = new LoginPage();
-    System.out.println("\n*********"+ mehtod.getName()+"**********\n");
+    util.log().info("\n\n*********"+ mehtod.getName()+"**********\n\n");
     }
 
     @BeforeClass
@@ -45,7 +45,7 @@ public class LoginTest extends AppFactory {
     }
     @Test
     public void verifyinvalidusername(){
-    System.out.println("This test is used to Login with invalid username and valid password");
+        util.log().info("This test is used to Login with invalid username and valid password");
     loginpage.enterusername(loginUser.getJSONObject("InvalidUser").getString("username"));
     loginpage.enterpassword(loginUser.getJSONObject("InvalidUser").getString("password"));
     loginpage.clickloginbutton();
@@ -53,18 +53,18 @@ public class LoginTest extends AppFactory {
     String expectederrormessage = stringHashMap.get("error_invalid_username_and_password");
     String actualmessage = loginpage.getErrorMessage();
 
-    System.out.println("Actual Error Message is:"+ actualmessage +"\nExpected Error Message is:"+expectederrormessage);
+        util.log().info("Actual Error Message is:"+ actualmessage +"\nExpected Error Message is:"+expectederrormessage);
     Assert.assertEquals(actualmessage,expectederrormessage);
 
     }
     @Test
     public  void verifyInvalidpassword(){
-        System.out.println("This test is used to Login with valid username and invalid password");
+        util.log().info("This test is used to Login with valid username and invalid password");
         loginpage.enterusername(loginUser.getJSONObject("InvalidPassword").getString("username"));
         loginpage.enterpassword(loginUser.getJSONObject("InvalidPassword").getString("password"));
         loginpage.clickloginbutton();
 
-        String expectederrormessage = stringHashMap.get("error_invalid_username_and_password");;
+        String expectederrormessage = stringHashMap.get("error_invalid_username_and_password"+ "Sample");;
         String actualmessage = loginpage.getErrorMessage();
 
         System.out.println("Actual Error Message is:"+ actualmessage +"\nExpected Error Message is:"+expectederrormessage);
@@ -72,14 +72,14 @@ public class LoginTest extends AppFactory {
     }
     @Test
     public void verifyvalidLogin(){
-        System.out.println("This test is used to Login with valid username and valid password");
+        util.log().info("This test is used to Login with valid username and valid password");
         loginpage.enterusername(loginUser.getJSONObject("validusernameandpassword").getString("username"));
         loginpage.enterpassword(loginUser.getJSONObject("validusernameandpassword").getString("password"));
         productpage = loginpage.clickloginbutton();
         String expectedTitle = stringHashMap.get("product.title");;
         String actualTitle = productpage.getTitle();
 
-        System.out.println("Actual Product Titel:"+expectedTitle+"Expected Title:"+actualTitle);
+        util.log().info("Actual Product Titel:"+expectedTitle+"Expected Title:"+actualTitle);
         Assert.assertEquals(actualTitle,expectedTitle);
 
     }
