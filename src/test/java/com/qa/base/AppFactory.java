@@ -29,26 +29,27 @@ public class AppFactory {
     protected HashMap<String, String> stringHashMap = new HashMap<>();
     InputStream stringIs;
 
-    utilities util;
+    public static utilities util = new utilities();
 
-    static Logger log = LogManager.getLogger(AppFactory.class.getName());
-
-
+    public  static  String dateTime;
+//    utilities util;
+//    static Logger log = LogManager.getLogger(AppFactory.class.getName());
     @BeforeTest
     @Parameters({"platformName","platformVersion","deviceName"})
     public void initializer(String platformName, String platformVersion, String deviceName) throws IOException, ParserConfigurationException, SAXException {
         try{
             configreader = new ConfigReader();
-            util = new utilities();
-            log.debug("This is debug Message");
-            log.info("This is info Message");
-            log.warn("This is warn Message");
-            log.error("This is error Message");
-            log.fatal("This is fatal Message");
+//            util = new utilities();
+//            log.debug("This is debug Message");
+//            log.info("This is info Message");
+//            log.warn("This is warn Message");
+//            log.error("This is error Message");
+//            log.fatal("This is fatal Message");
             String xmlFileName = "strings/string.xml";
             stringIs = getClass().getClassLoader().getResourceAsStream(xmlFileName);
             stringHashMap = util.parseStringXML(stringIs);
 
+            dateTime = util.getDateTime();
 
 
             DesiredCapabilities capabilities = new DesiredCapabilities();
@@ -62,7 +63,9 @@ public class AppFactory {
             capabilities.setCapability("appium:noReset",configreader.getNoReset());
 
             driver = new AndroidDriver(new URL(configreader.getAppiumServerEndpointURL()), capabilities);
+            util.log().info("App URL is {}",configreader.getAppiumServerEndpointURL());
             AppDriver.setDriver(driver);
+            util.log().info("Log Driver is set");
 
         }catch(Exception e){
             e.printStackTrace();
@@ -76,19 +79,23 @@ public class AppFactory {
         wait.until(ExpectedConditions.visibilityOf(element));
     }
 
-    public  void clickElement(WebElement element){
+    public  void clickElement(WebElement element,String message){
         waitforVisibility(element);
+        util.log().info(message);
         element.click();
     }
-    public  void sendKeys(WebElement element,String text){
+    public  void sendKeys(WebElement element,String text,String message){
     this.waitforVisibility(element);
+    util.log().info(message);
     element.sendKeys(text);
     }
 
     public String getAttribute(WebElement element, String attribute){
     this.waitforVisibility(element);
    return element.getAttribute(attribute);
-
+    }
+    public  static  String getDateTime(){
+        return  dateTime;
     }
     @AfterTest
          public  static void quitdriver(){

@@ -32,14 +32,14 @@ public class LoginPage extends AppFactory {
    By swaglabheader = By.xpath("//android.widget.ScrollView[@content-desc=\"test-Login\"]/android.view.ViewGroup/android.widget.ImageView[1]");
 
     public void enterusername(String username){
-    sendKeys(usernametextbox,username);
+    sendKeys(usernametextbox,username,"Entering Username" +username);
     }
 
     public void enterpassword(String password){
-        sendKeys(userpasswordtextbox,password);
+        sendKeys(userpasswordtextbox,password,"Entering Password" +password);
     }
     public ProductPage clickloginbutton(){
-        clickElement(LoginBtn);
+        clickElement(LoginBtn,"Clicking Login button");
         return new ProductPage();
 
     }
